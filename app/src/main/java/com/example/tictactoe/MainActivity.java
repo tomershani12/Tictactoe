@@ -1,10 +1,13 @@
 package com.example.tictactoe;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +55,15 @@ public class MainActivity extends AppCompatActivity {
 
         turn = "X";
         count = 0;
+        clearButton(R.id.btn_00);
+        clearButton(R.id.btn_01);
+        clearButton(R.id.btn_02);
+        clearButton(R.id.btn_10);
+        clearButton(R.id.btn_11);
+        clearButton(R.id.btn_12);
+        clearButton(R.id.btn_20);
+        clearButton(R.id.btn_21);
+        clearButton(R.id.btn_22);
     }
 
     private void handleClick(int row, int col, int id) {
@@ -63,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+    private void clearButton( int id) {
+            Button btn = findViewById(id);
+            btn.setText(null);
+    }
     private void onTurnEnd() {
         if (isWinner())
             endGame(turn + " won!");
@@ -73,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 endGame("Tie");
             else {
                 turn = (turn.equals("X") ? "O" : "X");
+                TextView txtTurn = findViewById(R.id.txtTurn);
+                txtTurn.setText("Turn of: "+turn);
             }
         }
     }
@@ -104,5 +121,20 @@ public class MainActivity extends AppCompatActivity {
             return true;
     }
     private  void endGame(String message) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        builder.setTitle("Tic-Tac-Toe")
+                .setMessage(message);
+
+        builder.setPositiveButton("Start New Game", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                onNewGame();
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
