@@ -8,8 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 
 public class MainActivity extends AppCompatActivity {
+
+    ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+    private static final int TONE_X_MOVE = ToneGenerator.TONE_CDMA_CONFIRM;
+    private static final int TONE_O_MOVE = ToneGenerator.TONE_PROP_ACK;
 
     String turn;
     String[][] board;
@@ -92,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 txtTurn.setText("Turn of: "+turn);
             }
         }
+        if (turn.equals("X"))        //Play tone
+            toneGenerator.startTone(TONE_X_MOVE);
+        else
+            toneGenerator.startTone(TONE_O_MOVE);
+
     }
     private boolean isWinner() {
         String winner = "None";
@@ -125,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
         builder.setTitle("Tic-Tac-Toe")
-                .setMessage(message);
+                .setMessage("Game ended with: "+ message);
 
         builder.setPositiveButton("Start New Game", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
